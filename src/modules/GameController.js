@@ -58,6 +58,18 @@ export class GameController {
     this.#computer.gameboard.placeShip([5, 8], 1, 'hor')
   }
 
+  playRound(x, y) {
+    if (this.#turn === this.#computer) return
+
+    if (this.#computer.gameboard.receiveAttack([x, y])) return
+
+    this.#turn = this.#computer
+
+    console.log("Computer's turn")
+
+    this.#turn = this.#player
+  }
+
   initEventListeners() {
     const playerBoard = document.querySelector('.enemy-board')
 
@@ -73,7 +85,7 @@ export class GameController {
 
         const x = e.target.dataset.x
         const y = e.target.dataset.y
-        this.#computer.gameboard.receiveAttack([x, y])
+        this.playRound(x, y)
 
         this.render()
       }
