@@ -16,9 +16,12 @@ export class Gameboard {
     return this.#gameboard
   }
 
-  #checkCollision(x, y) {
-    for (let i = y - 1; i <= y + 1; i++) {
-      for (let j = x - 1; j <= x + 1; j++) {
+  #checkCollision(x, y, length, axis) {
+    const xP = axis === 'hor' ? x + 1 : x + length
+    const yP = axis === 'vert' ? y + 1 : y + length
+
+    for (let i = y - 1; i <= yP; i++) {
+      for (let j = x - 1; j <= xP; j++) {
         if (i >= 0 && j >= 0 && i <= 9 && j <= 9) {
           if (this.#gameboard[j][i]) return false
         }
@@ -31,10 +34,10 @@ export class Gameboard {
   placeShip(coord, length, axis) {
     const [x, y] = coord
 
-    if (!this.#checkCollision(x, y)) return false
-
     if (axis === 'vert' && x + length - 1 > 9) return false
     else if (axis === 'hor' && y + length - 1 > 9) return false
+
+    if (!this.#checkCollision(x, y, length, axis)) return false
 
     const ship = new Ship(length)
     this.#gameboard[x][y] = ship

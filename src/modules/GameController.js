@@ -29,10 +29,11 @@ export class GameController {
 
     this.#player.gameboard.placeShip([2, 0], 3, 'vert')
     this.#player.gameboard.placeShip([2, 2], 3, 'hor')
+    this.#player.gameboard.placeShip([2, 0], 3, 'vert')
 
     this.#player.gameboard.placeShip([4, 2], 2, 'hor')
     this.#player.gameboard.placeShip([6, 0], 2, 'vert')
-    this.#player.gameboard.placeShip([0, 5], 2, 'vert')
+    this.#player.gameboard.placeShip([2, 7], 2, 'hor')
 
     this.#player.gameboard.placeShip([9, 0], 1, 'hor')
     this.#player.gameboard.placeShip([9, 9], 1, 'hor')
