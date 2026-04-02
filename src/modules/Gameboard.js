@@ -1,0 +1,43 @@
+import { Ship } from './Ship.js'
+
+// cSpell:ignore gameboard
+export class Gameboard {
+  gameboard = []
+
+  constructor() {
+    for (let i = 0; i < 10; i++) {
+      const row = [null, null, null, null, null, null, null, null, null, null]
+      this.gameboard.push(row)
+    }
+  }
+
+  #checkCollision(x, y) {
+    for (let i = y - 1; i <= y + 1; i++) {
+      for (let j = x - 1; j <= x + 1; j++) {
+        if (i >= 0 && j >= 0 && i <= 9 && j <= 9) {
+          if (this.gameboard[j][i]) return false
+        }
+      }
+    }
+
+    return true
+  }
+
+  placeShip(coord, length, axis) {
+    const [x, y] = coord
+
+    if (!this.#checkCollision(x, y)) return false
+
+    if (axis === 'vert' && x + length - 1 > 9) return false
+    else if (axis === 'hor' && y + length - 1 > 9) return false
+
+    const ship = new Ship(length)
+    this.gameboard[x][y] = ship
+
+    for (let i = 1; i < length; i++) {
+      this.gameboard[axis === 'vert' ? i : x][axis === 'hor' ? i : y] = ship
+    }
+
+    return true
+  }
+}
