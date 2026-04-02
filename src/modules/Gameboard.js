@@ -1,6 +1,6 @@
 import { Ship } from './Ship.js'
-
 // cSpell:ignore gameboard
+
 export class Gameboard {
   #gameboard = []
   #aliveShips = 0

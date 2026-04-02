@@ -1,0 +1,24 @@
+main {
+  display: flex;
+  justify-content: space-around;
+}
+
+.grid {
+  display: grid;
+  grid-template: repeat(10, 40px) / repeat(10, 40px);
+  gap: 2px;
+}
+
+.cell {
+  border: solid black 1px;
+}
+
+.cell.hit {
+  background-color: red;
+}
+.cell.miss {
+  background-color: gray;
+}
+.cell.ship {
+  background-color: blue;
+}
