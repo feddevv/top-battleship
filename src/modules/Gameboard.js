@@ -3,6 +3,7 @@ import { Ship } from './Ship.js'
 // cSpell:ignore gameboard
 export class Gameboard {
   gameboard = []
+  #aliveShips = 0
 
   constructor() {
     for (let i = 0; i < 10; i++) {
@@ -38,10 +39,12 @@ export class Gameboard {
       this.gameboard[axis === 'vert' ? i : x][axis === 'hor' ? i : y] = ship
     }
 
+    this.#aliveShips++
     return true
   }
 
   receiveAttack(coord) {
+    if (this.isLost()) return false
     const [x, y] = coord
     const ship = this.gameboard[x][y]
 
@@ -51,8 +54,14 @@ export class Gameboard {
     }
 
     ship.hit()
+    if (ship.isSunk()) this.#aliveShips--
     this.gameboard[x][y] = 'hit'
 
     return true
+  }
+
+  isLost() {
+    if (this.#aliveShips === 0) return true
+    return false
   }
 }

@@ -55,5 +55,30 @@ describe('Gameboard tests', () => {
 
       expect(gameboard.receiveAttack([0, 0])).toBe(true)
     })
+
+    test('should return false if there are still functional ships', () => {
+      gameboard.placeShip([0, 0], 2, 'hor')
+      gameboard.placeShip([5, 5], 1, 'vert')
+
+      gameboard.receiveAttack([5, 5])
+
+      expect(gameboard.isLost()).toBe(false)
+    })
+
+    test('should return true when all ships are sunk', () => {
+      gameboard.placeShip([0, 0], 2, 'hor')
+      gameboard.placeShip([2, 2], 1, 'vert')
+
+      gameboard.receiveAttack([0, 0])
+      gameboard.receiveAttack([0, 1])
+
+      gameboard.receiveAttack([2, 2])
+
+      expect(gameboard.isLost()).toBe(true)
+    })
+
+    test('should return true if no ships were ever placed (edge case)', () => {
+      expect(gameboard.isLost()).toBe(true)
+    })
   })
 })
