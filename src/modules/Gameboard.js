@@ -2,21 +2,25 @@ import { Ship } from './Ship.js'
 
 // cSpell:ignore gameboard
 export class Gameboard {
-  gameboard = []
+  #gameboard = []
   #aliveShips = 0
 
   constructor() {
     for (let i = 0; i < 10; i++) {
       const row = [null, null, null, null, null, null, null, null, null, null]
-      this.gameboard.push(row)
+      this.#gameboard.push(row)
     }
+  }
+
+  get gameboard() {
+    return this.#gameboard
   }
 
   #checkCollision(x, y) {
     for (let i = y - 1; i <= y + 1; i++) {
       for (let j = x - 1; j <= x + 1; j++) {
         if (i >= 0 && j >= 0 && i <= 9 && j <= 9) {
-          if (this.gameboard[j][i]) return false
+          if (this.#gameboard[j][i]) return false
         }
       }
     }
@@ -33,10 +37,10 @@ export class Gameboard {
     else if (axis === 'hor' && y + length - 1 > 9) return false
 
     const ship = new Ship(length)
-    this.gameboard[x][y] = ship
+    this.#gameboard[x][y] = ship
 
     for (let i = 1; i < length; i++) {
-      this.gameboard[axis === 'vert' ? i : x][axis === 'hor' ? i : y] = ship
+      this.#gameboard[axis === 'vert' ? i : x][axis === 'hor' ? i : y] = ship
     }
 
     this.#aliveShips++
@@ -47,16 +51,16 @@ export class Gameboard {
     if (this.isLost()) return false
 
     const [x, y] = coord
-    const ship = this.gameboard[x][y]
+    const ship = this.#gameboard[x][y]
 
     if (!ship) {
-      this.gameboard[x][y] = 'miss'
+      this.#gameboard[x][y] = 'miss'
       return false
     }
 
     ship.hit()
     if (ship.isSunk()) this.#aliveShips--
-    this.gameboard[x][y] = 'hit'
+    this.#gameboard[x][y] = 'hit'
 
     return true
   }
