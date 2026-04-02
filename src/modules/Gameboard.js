@@ -40,7 +40,8 @@ export class Gameboard {
     this.#gameboard[x][y] = ship
 
     for (let i = 1; i < length; i++) {
-      this.#gameboard[axis === 'vert' ? i : x][axis === 'hor' ? i : y] = ship
+      this.#gameboard[axis === 'vert' ? i + x : x][axis === 'hor' ? i + y : y] =
+        ship
     }
 
     this.#aliveShips++
