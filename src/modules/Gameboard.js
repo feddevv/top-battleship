@@ -45,6 +45,7 @@ export class Gameboard {
 
   receiveAttack(coord) {
     if (this.isLost()) return false
+
     const [x, y] = coord
     const ship = this.gameboard[x][y]
 
