@@ -40,4 +40,19 @@ export class Gameboard {
 
     return true
   }
+
+  receiveAttack(coord) {
+    const [x, y] = coord
+    const ship = this.gameboard[x][y]
+
+    if (!ship) {
+      this.gameboard[x][y] = 'miss'
+      return false
+    }
+
+    ship.hit()
+    this.gameboard[x][y] = 'hit'
+
+    return true
+  }
 }

@@ -1,5 +1,7 @@
 import { Gameboard } from '../modules/Gameboard.js'
 
+// cSpell:ignore gameboard
+
 describe('Gameboard tests', () => {
   let gameboard
 
@@ -40,6 +42,18 @@ describe('Gameboard tests', () => {
     test('should return false if placing a ship adjacent to another', () => {
       gameboard.placeShip([2, 2], 3, 'hor')
       expect(gameboard.placeShip([3, 2], 2, 'hor')).toBe(false)
+    })
+  })
+
+  describe('Attacks', () => {
+    test('should return false if hit does not touch the ship', () => {
+      expect(gameboard.receiveAttack([0, 0])).toBe(false)
+    })
+
+    test('should return true if hit touches the ship', () => {
+      gameboard.placeShip([0, 0], 3, 'vert')
+
+      expect(gameboard.receiveAttack([0, 0])).toBe(true)
     })
   })
 })
