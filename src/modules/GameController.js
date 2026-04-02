@@ -39,8 +39,23 @@ export class GameController {
     this.#player.gameboard.placeShip([9, 9], 1, 'hor')
     this.#player.gameboard.placeShip([0, 9], 1, 'hor')
     this.#player.gameboard.placeShip([5, 8], 1, 'hor')
+  }
 
-    console.log(this.#player.gameboard.gameboard)
+  populateComputerFleet() {
+    this.#computer.gameboard.placeShip([0, 0], 4, 'hor')
+
+    this.#computer.gameboard.placeShip([2, 0], 3, 'vert')
+    this.#computer.gameboard.placeShip([2, 2], 3, 'hor')
+    this.#computer.gameboard.placeShip([2, 0], 3, 'vert')
+
+    this.#computer.gameboard.placeShip([4, 2], 2, 'hor')
+    this.#computer.gameboard.placeShip([6, 0], 2, 'vert')
+    this.#computer.gameboard.placeShip([2, 7], 2, 'hor')
+
+    this.#computer.gameboard.placeShip([9, 0], 1, 'hor')
+    this.#computer.gameboard.placeShip([9, 9], 1, 'hor')
+    this.#computer.gameboard.placeShip([0, 9], 1, 'hor')
+    this.#computer.gameboard.placeShip([5, 8], 1, 'hor')
   }
 
   initEventListeners() {
