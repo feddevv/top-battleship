@@ -2,22 +2,22 @@ import { Player } from './Player.js'
 import { DOMController } from './DOMController.js'
 
 export class GameController {
-  #player0
-  #player1
+  #player
+  #computer
   #dom
   #turn
 
   constructor() {
-    this.#player0 = new Player('real')
-    this.#player1 = new Player('computer')
+    this.#player = new Player('real')
+    this.#computer = new Player('computer')
     this.#dom = new DOMController()
-    this.#turn = this.#player0
+    this.#turn = this.#player
   }
 
-  initGame() {
-    this.#dom.renderGrid(this.#player0.gameboard.gameboard, '.player-board')
+  render() {
+    this.#dom.renderGrid(this.#player.gameboard.gameboard, '.player-board')
     this.#dom.renderGrid(
-      this.#player1.gameboard.gameboard,
+      this.#computer.gameboard.gameboard,
       '.enemy-board',
       true,
     )
