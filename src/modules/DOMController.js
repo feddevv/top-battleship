@@ -1,10 +1,14 @@
 // cSpell:ignore gameboard
 export class DOMController {
   renderGrid(gameboard, container, isEnemy = false) {
-    gameboard.forEach((i) => {
-      i.forEach((j) => {
+    const grid = document.querySelector(container)
+    grid.innerHTML = ''
+    gameboard.forEach((i, iIndex) => {
+      i.forEach((j, jIndex) => {
         const div = document.createElement('div')
         div.className = `cell`
+        div.dataset.x = iIndex
+        div.dataset.y = jIndex
 
         if (j === 'miss') {
           div.classList.add('miss')
@@ -14,7 +18,7 @@ export class DOMController {
           div.classList.add('ship')
         }
 
-        document.querySelector(container).appendChild(div)
+        grid.appendChild(div)
       })
     })
   }

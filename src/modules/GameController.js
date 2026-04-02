@@ -22,4 +22,45 @@ export class GameController {
       true,
     )
   }
+
+  // Temporary func
+  populatePlayerFleet() {
+    this.#player.gameboard.placeShip([0, 0], 4, 'hor')
+
+    this.#player.gameboard.placeShip([2, 0], 3, 'vert')
+    this.#player.gameboard.placeShip([2, 2], 3, 'hor')
+
+    this.#player.gameboard.placeShip([4, 2], 2, 'hor')
+    this.#player.gameboard.placeShip([6, 0], 2, 'vert')
+    this.#player.gameboard.placeShip([0, 5], 2, 'vert')
+
+    this.#player.gameboard.placeShip([9, 0], 1, 'hor')
+    this.#player.gameboard.placeShip([9, 9], 1, 'hor')
+    this.#player.gameboard.placeShip([0, 9], 1, 'hor')
+    this.#player.gameboard.placeShip([5, 8], 1, 'hor')
+
+    console.log(this.#player.gameboard.gameboard)
+  }
+
+  initEventListeners() {
+    const playerBoard = document.querySelector('.enemy-board')
+
+    playerBoard.addEventListener('click', (e) => {
+      const target = e.target
+      if (target && target.matches('.cell')) {
+        if (
+          target.classList.contains('hit') ||
+          target.classList.contains('miss')
+        ) {
+          return
+        }
+
+        const x = e.target.dataset.x
+        const y = e.target.dataset.y
+        this.#computer.gameboard.receiveAttack([x, y])
+
+        this.render()
+      }
+    })
+  }
 }
