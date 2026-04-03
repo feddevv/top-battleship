@@ -63,8 +63,12 @@ export class Gameboard {
     }
 
     ship.hit()
-    if (ship.isSunk()) this.#aliveShips--
     this.#gameboard[x][y] = 'hit'
+
+    if (ship.isSunk()) {
+      this.#aliveShips--
+      return ship
+    }
 
     return true
   }

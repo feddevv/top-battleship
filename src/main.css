@@ -129,6 +129,10 @@ main {
   transform: translateY(0);
 }
 
+.btn:disabled {
+  background: linear-gradient(135deg, #858585, #cdcdcd);
+}
+
 .grid {
   display: grid;
   grid-template: repeat(10, var(--cell-size)) / repeat(10, var(--cell-size));

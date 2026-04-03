@@ -1,6 +1,5 @@
 import { Player } from './Player.js'
 import { DOMController } from './DOMController.js'
-import { Ship } from './Ship.js'
 
 // cSpell:ignore gameboard
 export class GameController {
@@ -114,7 +113,11 @@ export class GameController {
           target.classList.contains('miss')
         ) {
           return
-        }
+        } else if (
+          this.#computer.gameboard.isLost() ||
+          this.#player.gameboard.isLost()
+        )
+          return
 
         const x = e.target.dataset.x
         const y = e.target.dataset.y
@@ -122,12 +125,12 @@ export class GameController {
       }
     })
 
-    randomButton.addEventListener('click', (e) => {
+    randomButton.addEventListener('click', () => {
       this.randomFilling(this.#player.gameboard)
       this.randomFilling(this.#computer.gameboard)
       this.render()
 
-      e.target.disabled = true
+      randomButton.disabled = true
     })
   }
 }
