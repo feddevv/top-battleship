@@ -52,14 +52,14 @@ export class Gameboard {
   }
 
   receiveAttack(coord) {
-    if (this.isLost()) return false
+    if (this.isLost()) return { status: 'lost', coordinates: [] }
 
     const [x, y] = coord
     const ship = this.#gameboard[x][y]
 
     if (!ship) {
       this.#gameboard[x][y] = 'miss'
-      return false
+      return { status: 'miss', coordinates: [x, y] }
     }
 
     ship.hit()
@@ -67,10 +67,10 @@ export class Gameboard {
 
     if (ship.isSunk()) {
       this.#aliveShips--
-      return ship
+      return { status: 'sunk', coordinates: [x, y] }
     }
 
-    return true
+    return { status: 'hit', coordinates: [x, y] }
   }
 
   isLost() {

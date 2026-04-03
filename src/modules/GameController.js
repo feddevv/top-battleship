@@ -43,7 +43,10 @@ export class GameController {
       return true
     }
 
-    if (isHit) {
+    if (isHit && isHit.status === 'sunk') {
+      alert('Ship has been sunk!')
+      return true
+    } else if (isHit && isHit.status === 'hit') {
       return true
     } else {
       this.#turn = this.#computer
@@ -61,7 +64,7 @@ export class GameController {
       return
     }
 
-    if (isHit) {
+    if (isHit && isHit.status === 'hit') {
       setTimeout(() => {
         this.computerMove()
       }, 600)
