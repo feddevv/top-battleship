@@ -1,5 +1,6 @@
 import { Player } from './Player.js'
 import { DOMController } from './DOMController.js'
+import { Ship } from './Ship.js'
 
 // cSpell:ignore gameboard
 export class GameController {
@@ -22,38 +23,6 @@ export class GameController {
       '.enemy-board',
       true,
     )
-  }
-
-  // Temporary func
-  populatePlayerFleet() {
-    this.#player.gameboard.placeShip([0, 0], 4, 'hor')
-    this.#player.gameboard.placeShip([2, 0], 3, 'vert')
-    this.#player.gameboard.placeShip([2, 2], 3, 'hor')
-    this.#player.gameboard.placeShip([2, 0], 3, 'vert')
-    this.#player.gameboard.placeShip([4, 2], 2, 'hor')
-    this.#player.gameboard.placeShip([6, 0], 2, 'vert')
-    this.#player.gameboard.placeShip([2, 7], 2, 'hor')
-    this.#player.gameboard.placeShip([9, 0], 1, 'hor')
-    this.#player.gameboard.placeShip([9, 9], 1, 'hor')
-    this.#player.gameboard.placeShip([0, 9], 1, 'hor')
-    this.#player.gameboard.placeShip([5, 8], 1, 'hor')
-  }
-
-  populateComputerFleet() {
-    this.#computer.gameboard.placeShip([0, 0], 4, 'hor')
-
-    this.#computer.gameboard.placeShip([2, 0], 3, 'vert')
-    this.#computer.gameboard.placeShip([2, 2], 3, 'hor')
-    this.#computer.gameboard.placeShip([2, 0], 3, 'vert')
-
-    this.#computer.gameboard.placeShip([4, 2], 2, 'hor')
-    this.#computer.gameboard.placeShip([6, 0], 2, 'vert')
-    this.#computer.gameboard.placeShip([2, 7], 2, 'hor')
-
-    this.#computer.gameboard.placeShip([9, 0], 1, 'hor')
-    this.#computer.gameboard.placeShip([9, 9], 1, 'hor')
-    this.#computer.gameboard.placeShip([0, 9], 1, 'hor')
-    this.#computer.gameboard.placeShip([5, 8], 1, 'hor')
   }
 
   playRound(x, y) {
@@ -116,8 +85,26 @@ export class GameController {
     return [x, y]
   }
 
+  randomFilling(target) {
+    const ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
+
+    target.clearBoard()
+
+    let i = 0
+    while (i <= 9) {
+      const randCoord = this.makeRandomMove()
+      const randDirection = Math.random() < 0.5 ? 'vert' : 'hor'
+      if (!target.placeShip(randCoord, ships[i], randDirection)) {
+        continue
+      }
+
+      i++
+    }
+  }
+
   initEventListeners() {
     const playerBoard = document.querySelector('.enemy-board')
+    const randomButton = document.querySelector('.btn.random')
 
     playerBoard.addEventListener('click', (e) => {
       const target = e.target
@@ -133,6 +120,14 @@ export class GameController {
         const y = e.target.dataset.y
         this.playRound(x, y)
       }
+    })
+
+    randomButton.addEventListener('click', (e) => {
+      this.randomFilling(this.#player.gameboard)
+      this.randomFilling(this.#computer.gameboard)
+      this.render()
+
+      e.target.disabled = true
     })
   }
 }

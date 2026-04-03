@@ -1,5 +1,10 @@
 // cSpell:ignore gameboard
 export class DOMController {
+  clearGrid(container) {
+    const grid = document.querySelector(container)
+    grid.innerHTML = ''
+  }
+
   renderGrid(gameboard, container, isEnemy = false) {
     const grid = document.querySelector(container)
     grid.innerHTML = ''

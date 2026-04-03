@@ -73,4 +73,13 @@ export class Gameboard {
     if (this.#aliveShips === 0) return true
     return false
   }
+
+  clearBoard() {
+    this.#gameboard = []
+
+    for (let i = 0; i < 10; i++) {
+      const row = [null, null, null, null, null, null, null, null, null, null]
+      this.#gameboard.push(row)
+    }
+  }
 }

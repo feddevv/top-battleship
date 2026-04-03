@@ -1,6 +1,18 @@
 main {
   display: flex;
+  flex-direction: column;
+}
+
+.boards {
+  display: flex;
   justify-content: space-around;
+}
+
+.buttons {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .grid {
