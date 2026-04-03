@@ -77,8 +77,8 @@ export class GameController {
     const playerGameboard = this.#player.gameboard
     let x, y
     do {
-      x = Math.floor(Math.random() * 9)
-      y = Math.floor(Math.random() * 9)
+      x = Math.floor(Math.random() * 10)
+      y = Math.floor(Math.random() * 10)
     } while (
       playerGameboard.gameboard[x][y] === 'miss' ||
       playerGameboard.gameboard[x][y] === 'hit'
