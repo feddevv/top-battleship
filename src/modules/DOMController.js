@@ -28,5 +28,15 @@ export class DOMController {
     })
   }
 
+  animateShipSinking(coord, grid) {
+    for (const [x, y] of coord) {
+      const cell = document.querySelector(
+        `${grid} [data-x="${x}"][data-y="${y}"]`,
+      )
+
+      cell.classList.add('cell-sunk-animate')
+    }
+  }
+
   showWinPopUp(winner) {}
 }

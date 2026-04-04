@@ -44,7 +44,7 @@ export class GameController {
     }
 
     if (isHit && isHit.status === 'sunk') {
-      alert('Ship has been sunk!')
+      this.#dom.animateShipSinking(isHit.coordinates, '.enemy-board')
       return true
     } else if (isHit && isHit.status === 'hit') {
       return true
@@ -64,7 +64,12 @@ export class GameController {
       return
     }
 
-    if (isHit && isHit.status === 'hit') {
+    if (isHit && isHit.status === 'sunk') {
+      this.#dom.animateShipSinking(isHit.coordinates, '.player-board')
+      setTimeout(() => {
+        this.computerMove()
+      }, 600)
+    } else if (isHit && isHit.status === 'hit') {
       setTimeout(() => {
         this.computerMove()
       }, 600)

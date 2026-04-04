@@ -67,10 +67,46 @@ export class Gameboard {
 
     if (ship.isSunk()) {
       this.#aliveShips--
-      return { status: 'sunk', coordinates: [x, y] }
+      return { status: 'sunk', coordinates: this.getFullShip([x, y]) }
     }
 
     return { status: 'hit', coordinates: [x, y] }
+  }
+
+  getFullShip(coord) {
+    const x = Number(coord[0]),
+      y = Number(coord[1])
+    if (this.gameboard[x][y] === null) return []
+
+    const res = [[x, y]]
+    const queue = [[x, y]]
+    const visited = new Set([`${x} ${y}`])
+
+    while (queue.length > 0) {
+      const [x, y] = queue.shift()
+
+      for (let i = y - 1; i <= y + 1; i++) {
+        if (i >= 0 && i <= 9 && i !== y && !visited.has(`${x} ${i}`)) {
+          if (this.gameboard[x][i] === 'hit') {
+            visited.add(`${x} ${i}`)
+            res.push([x, i])
+            queue.push([x, i])
+          }
+        }
+      }
+
+      for (let i = x - 1; i <= x + 1; i++) {
+        if (i >= 0 && i <= 9 && i !== x && !visited.has(`${i} ${y}`)) {
+          if (this.gameboard[i][y] === 'hit') {
+            visited.add(`${i} ${y}`)
+            res.push([i, y])
+            queue.push([i, y])
+          }
+        }
+      }
+    }
+
+    return res
   }
 
   isLost() {

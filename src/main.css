@@ -167,6 +167,29 @@ main {
   background-color: var(--ship);
 }
 
+.cell-sunk-animate {
+  animation: ship-explode 0.6s ease-out;
+  background-color: #ff4d4d;
+  z-index: 10;
+  position: relative;
+}
+
+@keyframes ship-explode {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.04);
+    filter: brightness(2);
+    box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.7);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
 @keyframes slide-up {
   from {
     opacity: 0;
