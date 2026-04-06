@@ -62,10 +62,9 @@ export class GameController {
     }
   }
 
-  computerMove() {
+  computerMove(coord = this.makeRandomMove()) {
     if (!this.#isActive) return
 
-    const coord = this.makeRandomMove()
     const isHit = this.#player.gameboard.receiveAttack(coord)
 
     this.render()
