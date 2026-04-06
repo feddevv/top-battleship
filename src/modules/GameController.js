@@ -7,6 +7,7 @@ export class GameController {
   #computer
   #dom
   #turn
+  #isActive = false
 
   constructor() {
     this.#player = new Player('real')
@@ -31,10 +32,14 @@ export class GameController {
 
     this.#turn = this.#computer
 
-    setTimeout(() => this.computerMove(), 600)
+    setTimeout(() => {
+      this.computerMove()
+    }, 600)
   }
 
   playerMove(x, y) {
+    if (!this.#isActive) return
+
     const isHit = this.#computer.gameboard.receiveAttack([x, y])
     this.render()
 
@@ -58,6 +63,8 @@ export class GameController {
   }
 
   computerMove() {
+    if (!this.#isActive) return
+
     const coord = this.makeRandomMove()
     const isHit = this.#player.gameboard.receiveAttack(coord)
 
@@ -117,9 +124,21 @@ export class GameController {
     }
   }
 
+  resetGame() {
+    this.#player.gameboard.clearBoard()
+    this.#computer.gameboard.clearBoard()
+    this.render()
+
+    this.#isActive = false
+    this.#turn = this.#player
+
+    document.querySelector('.btn.random').disabled = false
+  }
+
   initEventListeners() {
     const playerBoard = document.querySelector('.enemy-board')
     const randomButton = document.querySelector('.btn.random')
+    const resetButton = document.querySelector('.btn.reset')
 
     playerBoard.addEventListener('click', (e) => {
       const target = e.target
@@ -147,6 +166,12 @@ export class GameController {
       this.render()
 
       randomButton.disabled = true
+      this.#isActive = true
+      console.log(this.#isActive)
+    })
+
+    resetButton.addEventListener('click', () => {
+      this.resetGame()
     })
   }
 }

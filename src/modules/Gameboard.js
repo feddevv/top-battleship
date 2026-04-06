@@ -116,6 +116,7 @@ export class Gameboard {
 
   clearBoard() {
     this.#gameboard = []
+    this.#aliveShips = 0
 
     for (let i = 0; i < 10; i++) {
       const row = [null, null, null, null, null, null, null, null, null, null]
