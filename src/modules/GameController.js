@@ -102,9 +102,7 @@ export class GameController {
 
     let i = 0
     while (i <= 9) {
-      const randCoord = this.#computer.makeRandomMove(
-        this.#player.gameboard.gameboard,
-      )
+      const randCoord = this.#computer.makeRandomMove(target.gameboard)
       const randDirection = Math.random() < 0.5 ? 'vert' : 'hor'
       if (!target.placeShip(randCoord, ships[i], randDirection)) {
         continue
