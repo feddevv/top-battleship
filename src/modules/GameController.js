@@ -1,4 +1,4 @@
-import { Player } from './Player.js'
+import { Computer, Player } from './Player.js'
 import { DOMController } from './DOMController.js'
 
 // cSpell:ignore gameboard
@@ -11,7 +11,7 @@ export class GameController {
 
   constructor() {
     this.#player = new Player('real')
-    this.#computer = new Player('computer')
+    this.#computer = new Computer('computer')
     this.#dom = new DOMController()
     this.#turn = this.#player
   }
@@ -62,7 +62,9 @@ export class GameController {
     }
   }
 
-  computerMove(coord = this.makeRandomMove()) {
+  computerMove(
+    coord = this.#computer.makeRandomMove(this.#player.gameboard.gameboard),
+  ) {
     if (!this.#isActive) return
 
     const isHit = this.#player.gameboard.receiveAttack(coord)
@@ -85,25 +87,12 @@ export class GameController {
       }, 600)
     } else if (isHit && isHit.status === 'hit') {
       setTimeout(() => {
-        this.computerMove()
+        const enemyBoard = this.#player.gameboard.gameboard
+        this.computerMove(this.#computer.findRandomNeighbor(coord, enemyBoard))
       }, 600)
     } else {
       this.#turn = this.#player
     }
-  }
-
-  makeRandomMove() {
-    const playerGameboard = this.#player.gameboard
-    let x, y
-    do {
-      x = Math.floor(Math.random() * 10)
-      y = Math.floor(Math.random() * 10)
-    } while (
-      playerGameboard.gameboard[x][y] === 'miss' ||
-      playerGameboard.gameboard[x][y] === 'hit'
-    )
-
-    return [x, y]
   }
 
   randomFilling(target) {
@@ -113,7 +102,9 @@ export class GameController {
 
     let i = 0
     while (i <= 9) {
-      const randCoord = this.makeRandomMove()
+      const randCoord = this.#computer.makeRandomMove(
+        this.#player.gameboard.gameboard,
+      )
       const randDirection = Math.random() < 0.5 ? 'vert' : 'hor'
       if (!target.placeShip(randCoord, ships[i], randDirection)) {
         continue
