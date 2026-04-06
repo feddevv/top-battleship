@@ -39,7 +39,11 @@ export class GameController {
     this.render()
 
     if (this.#computer.gameboard.isLost()) {
-      alert('Player won!')
+      this.#dom.showWinPopUp(
+        'Victory!',
+        'You win!',
+        'Enemy fleet has been sunk!',
+      )
       return true
     }
 
@@ -60,7 +64,11 @@ export class GameController {
     this.render()
 
     if (this.#player.gameboard.isLost()) {
-      alert('Computer won!')
+      this.#dom.showWinPopUp(
+        'Defeat!',
+        'You lost!',
+        'Your fleet has been sunk.',
+      )
       return
     }
 

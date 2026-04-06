@@ -38,5 +38,13 @@ export class DOMController {
     }
   }
 
-  showWinPopUp(winner) {}
+  showWinPopUp(kicker, title, message) {
+    const popup = document.querySelector('.result-dialog')
+
+    popup.querySelector('.result-kicker').textContent = kicker
+    popup.querySelector('.result-title').textContent = title
+    popup.querySelector('.result-message').textContent = message
+
+    popup.showModal()
+  }
 }

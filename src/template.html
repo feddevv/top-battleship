@@ -27,6 +27,25 @@
       <div class="buttons">
         <button class="btn random">Random</button>
       </div>
+
+      <dialog id="my-popup" class="result-dialog" data-result="win">
+        <div class="result-modal-card">
+          <p class="result-kicker"></p>
+          <h2 class="result-title"></h2>
+          <p class="result-message"></p>
+
+          <div class="result-actions">
+            <button
+              commandfor="my-popup"
+              command="close"
+              class="btn result-primary"
+              type="button"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </dialog>
     </main>
   </body>
 </html>
