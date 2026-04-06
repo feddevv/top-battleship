@@ -97,6 +97,66 @@ main {
   color: #2f5576;
 }
 
+.fleet-dock {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 12px 30px rgba(29, 67, 97, 0.12);
+  animation: slide-up 420ms ease both;
+  animation-delay: 180ms;
+}
+
+.fleet-dock-head h2 {
+  margin: 0;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #2f5576;
+}
+
+.fleet-dock-head p {
+  margin-top: 0.35rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.fleet-list {
+  margin-top: 0.95rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+
+.dock-ship {
+  border: none;
+  background: linear-gradient(180deg, #f2fbff, #e5f3fc);
+  display: inline-flex;
+  gap: 2px;
+  cursor: grab;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease;
+}
+
+.dock-ship span {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background: linear-gradient(155deg, #3176a7, #1f5f8d);
+}
+
+.dock-ship:hover {
+  transform: translateY(-2px);
+  border-color: #4d88af;
+  box-shadow: 0 8px 16px rgba(31, 82, 117, 0.2);
+}
+
+.dock-ship:active {
+  cursor: grabbing;
+  transform: translateY(0);
+}
+
 .buttons {
   margin-top: 0.6rem;
   display: flex;
@@ -265,6 +325,14 @@ main {
 }
 
 @media (max-width: 520px) {
+  .fleet-list {
+    justify-content: center;
+  }
+
+  .fleet-dock-head {
+    text-align: center;
+  }
+
   .result-actions {
     flex-direction: column;
   }

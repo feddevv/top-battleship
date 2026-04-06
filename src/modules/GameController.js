@@ -155,7 +155,6 @@ export class GameController {
 
       randomButton.disabled = true
       this.#isActive = true
-      console.log(this.#isActive)
     })
 
     resetButton.addEventListener('click', () => {
