@@ -82,14 +82,22 @@ export class DOMController {
     ships.forEach((ship) => {
       const spans = '<span></span>'.repeat(ship)
       dock.innerHTML += `
-      <button
-        data-length="${ship}"
-        class="dock-ship length-${ship}"
-        type="button"
-        draggable="true"
-      >
-        ${spans}
-      </button>
+      <div class="dock-item">
+        <button
+          data-length="${ship}"
+          data-direction="hor"
+          class="dock-ship length-${ship}"
+          type="button"
+          draggable="true"
+        >
+          ${spans}
+        </button>
+
+        <div class="dock-item-controls" role="group" aria-label="Ship orientation">
+          <button class="orientation-btn is-active" type="button" data-direction="hor">Horizontal</button>
+          <button class="orientation-btn" type="button" data-direction="vert">Vertical</button>
+        </div>
+      </div>
       `
     })
   }
@@ -97,6 +105,8 @@ export class DOMController {
   showEmpty() {
     const p = document.createElement('p')
     const fleetList = document.querySelector('.fleet-list')
+    fleetList.innerHTML = ''
+
     p.textContent = 'Empty'
 
     fleetList.appendChild(p)

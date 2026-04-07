@@ -124,9 +124,17 @@ main {
 .fleet-list {
   margin-top: 0.95rem;
   display: flex;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: 1.2rem;
   width: 100%;
+}
+
+.dock-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .fleet-list > p {
@@ -147,6 +155,10 @@ main {
     border-color 140ms ease;
 }
 
+.dock-ship.vertical {
+  flex-direction: column;
+}
+
 .dock-ship span {
   width: var(--cell-size);
   height: var(--cell-size);
@@ -162,6 +174,36 @@ main {
 .dock-ship:active {
   cursor: grabbing;
   transform: translateY(0);
+}
+
+.dock-item-controls {
+  display: inline-flex;
+  border-radius: 999px;
+  border: 1px solid rgba(49, 101, 140, 0.32);
+  background: rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+}
+
+.orientation-btn {
+  border: none;
+  background: transparent;
+  color: #1f4d6d;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+}
+
+.orientation-btn.is-active {
+  background: linear-gradient(135deg, #2a6997, #3b84b8);
+  color: #f6fbff;
+}
+
+.orientation-btn:focus-visible {
+  outline: 2px solid #2f7fb0;
+  outline-offset: -1px;
 }
 
 .buttons {

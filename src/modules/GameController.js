@@ -119,8 +119,12 @@ export class GameController {
     this.#player.gameboard.clearBoard()
     this.#computer.gameboard.clearBoard()
 
-    this.updateBoard(this.#player.gameboard.gameboard, '.player-board')
-    this.updateBoard(this.#computer.gameboard.gameboard, '.enemy-board', true)
+    this.#dom.createGrid(this.#player.gameboard.gameboard, '.player-board')
+    this.#dom.createGrid(
+      this.#computer.gameboard.gameboard,
+      '.enemy-board',
+      true,
+    )
     this.#dom.createDockFleet()
 
     this.#isActive = false
@@ -128,13 +132,15 @@ export class GameController {
 
     document.querySelector('.btn.random').disabled = false
 
-    this.initEventListeners()
+    this.dragAndDropListeners()
   }
 
   dragAndDropListeners() {
     const boardCells = document.querySelectorAll('.player-board > .cell')
     const dockShips = document.querySelectorAll('.dock-ship')
+    const orientationButtons = document.querySelectorAll('.orientation-btn')
     const currentDragging = {
+      ship: null,
       length: null,
       direction: null,
     }
@@ -147,26 +153,47 @@ export class GameController {
           : currentDragging.length + x
 
       for (let i = first; i < last; i++) {
-        if (i > 9) break
+        const currentX = currentDragging.direction === 'hor' ? x : i
+        const currentY = currentDragging.direction === 'hor' ? i : y
         const cellToHighlight = document.querySelector(
-          `.cell[data-x="${x}"][data-y="${i}"]`,
+          `.cell[data-x="${currentX}"][data-y="${currentY}"]`,
         )
 
+        if (!cellToHighlight) continue
         callback(cellToHighlight)
       }
     }
 
+    orientationButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const controls = btn.closest('.dock-item-controls')
+        const ship = btn.closest('.dock-item')?.querySelector('.dock-ship')
+
+        if (!controls || !ship) return
+
+        controls.querySelectorAll('.orientation-btn').forEach((controlBtn) => {
+          controlBtn.classList.toggle('is-active', controlBtn === btn)
+        })
+
+        const direction = btn.dataset.direction
+        ship.dataset.direction = direction
+        ship.classList.toggle('vertical', direction === 'vert')
+      })
+    })
+
     dockShips.forEach((ship) => {
       ship.addEventListener('dragstart', (e) => {
+        currentDragging.ship = ship
         const length = Number(ship.dataset.length)
 
         currentDragging.length = length
-        currentDragging.direction = 'hor'
+        currentDragging.direction = ship.dataset.direction || 'hor'
 
         e.dataTransfer.setData('ship-length', length)
       })
 
       ship.addEventListener('dragend', () => {
+        currentDragging.ship = null
         currentDragging.length = null
         currentDragging.direction = null
       })
@@ -193,16 +220,20 @@ export class GameController {
 
       // When the ship is dropped
       cell.addEventListener('drop', (e) => {
+        console.log(currentDragging)
         const length = Number(e.dataTransfer.getData('ship-length'))
         const x = Number(cell.dataset.x)
         const y = Number(cell.dataset.y)
+        const direction = currentDragging.direction || 'hor'
 
         handleHighlight(x, y, (cell) => this.#dom.removeHighlight(cell))
 
-        if (this.#player.gameboard.placeShip([x, y], length, 'hor')) {
-          this.#dom.removeElement(`.dock-ship.length-${length}`)
+        if (this.#player.gameboard.placeShip([x, y], length, direction)) {
+          currentDragging.ship?.closest('.dock-item')?.remove()
           this.updateBoard(this.#player.gameboard.gameboard, '.player-board')
         }
+
+        currentDragging.ship = null
 
         if (document.querySelector('.fleet-list').childElementCount === 0) {
           this.#isActive = true
@@ -245,6 +276,8 @@ export class GameController {
 
       this.updateBoard(this.#player.gameboard.gameboard, '.player-board')
       this.updateBoard(this.#computer.gameboard.gameboard, '.enemy-board', true)
+
+      this.#dom.showEmpty()
 
       randomButton.disabled = true
       this.#isActive = true
