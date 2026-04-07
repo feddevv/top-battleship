@@ -127,12 +127,93 @@ export class GameController {
     document.querySelector('.btn.random').disabled = false
   }
 
+  dragAndDropListeners() {
+    const boardCells = document.querySelectorAll('.player-board > .cell')
+    const dockShips = document.querySelectorAll('.dock-ship')
+    const currentDragging = {
+      length: null,
+      direction: null,
+    }
+
+    const handleHighlight = (x, y, callback) => {
+      const first = currentDragging.direction === 'hor' ? y : x
+      const last =
+        currentDragging.direction === 'hor'
+          ? currentDragging.length + y
+          : currentDragging.length + x
+
+      for (let i = first; i < last; i++) {
+        if (i > 9) break
+        const cellToHighlight = document.querySelector(
+          `.cell[data-x="${x}"][data-y="${i}"]`,
+        )
+
+        callback(cellToHighlight)
+      }
+    }
+
+    dockShips.forEach((ship) => {
+      ship.addEventListener('dragstart', (e) => {
+        const length = Number(ship.dataset.length)
+
+        currentDragging.length = length
+        currentDragging.direction = 'hor'
+
+        e.dataTransfer.setData('ship-length', length)
+      })
+
+      ship.addEventListener('dragend', () => {
+        currentDragging.length = null
+        currentDragging.direction = null
+      })
+    })
+
+    // When the ship enters the cell
+    boardCells.forEach((cell) => {
+      cell.addEventListener('dragover', (e) => {
+        e.preventDefault()
+
+        const x = Number(cell.dataset.x)
+        const y = Number(cell.dataset.y)
+
+        handleHighlight(x, y, (cell) => this.#dom.addHighlight(cell))
+      })
+
+      // When the ship leaves the cell
+      cell.addEventListener('dragleave', () => {
+        const x = Number(cell.dataset.x)
+        const y = Number(cell.dataset.y)
+
+        handleHighlight(x, y, (cell) => this.#dom.removeHighlight(cell))
+      })
+
+      // When the ship is dropped
+      cell.addEventListener('drop', (e) => {
+        const length = Number(e.dataTransfer.getData('ship-length'))
+        const x = Number(cell.dataset.x)
+        const y = Number(cell.dataset.y)
+
+        handleHighlight(x, y, (cell) => this.#dom.removeHighlight(cell))
+
+        if (this.#player.gameboard.placeShip([x, y], length, 'hor')) {
+          this.#dom.removeElement(`.dock-ship.length-${length}`)
+          this.updateBoard(this.#player.gameboard.gameboard, '.player-board')
+        }
+
+        if (document.querySelector('.fleet-list').childElementCount === 0) {
+          this.#isActive = true
+          this.randomFilling(this.#computer.gameboard)
+        }
+      })
+    })
+  }
+
   initEventListeners() {
-    const playerBoard = document.querySelector('.enemy-board')
+    const computerBoard = document.querySelector('.enemy-board')
     const randomButton = document.querySelector('.btn.random')
     const resetButton = document.querySelector('.btn.reset')
 
-    playerBoard.addEventListener('click', (e) => {
+    computerBoard.addEventListener('click', (e) => {
       const target = e.target
       if (target && target.matches('.cell')) {
         if (
@@ -166,5 +247,7 @@ export class GameController {
     resetButton.addEventListener('click', () => {
       this.resetGame()
     })
+
+    this.dragAndDropListeners()
   }
 }

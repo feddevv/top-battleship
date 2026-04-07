@@ -68,4 +68,9 @@ export class DOMController {
   removeHighlight(cell) {
     cell.classList.remove('highlighted')
   }
+
+  removeElement(selector) {
+    const element = document.querySelector(selector)
+    element.remove()
+  }
 }
