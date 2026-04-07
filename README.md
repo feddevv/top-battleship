@@ -1,91 +1,151 @@
-# webpack-template
+# Battleship
 
-A minimal Webpack 5 starter template with CSS support, HTML templating, and separate development/production configurations.
+A browser-based Battleship game built with JavaScript modules, Webpack, and Jest.
 
-## Features
+## Overview
 
-- **Webpack 5** bundler with ES module config files
-- **CSS** — `css-loader` + `style-loader` pipeline for importing CSS into JS
-- **HTML** — `html-webpack-plugin` generates the output HTML from a template
-- **Dev server** — live-reloading development server via `webpack-dev-server`
-- **Split config** — shared base config merged with environment-specific overrides via `webpack-merge`
-- **Clean output** — `dist/` is cleaned automatically on every build
+This project implements a classic 10x10 Battleship game with:
 
-## Project Structure
+- Two boards: player and computer
+- Drag-and-drop fleet placement with per-ship orientation toggles
+- Random fleet placement option
+- Turn-based combat with hit, miss, and sunk states
+- Basic computer targeting logic after successful hits
+- Win/lose modal when one fleet is destroyed
 
-```
-webpack-template/
-├── src/
-│   ├── index.js        # Entry point
-│   ├── main.css        # Global styles
-│   └── template.html   # HTML template
-├── webpack.common.js   # Shared webpack config
-├── webpack.dev.js      # Development config
-├── webpack.prod.js     # Production config
-└── package.json
-```
+## Tech Stack
 
-## Getting Started
+- JavaScript (ES modules)
+- Webpack 5
+- Babel
+- Jest
+- HTML + CSS
 
-### Prerequisites
+## Requirements
 
-- [Node.js](https://nodejs.org/) (v18+ recommended)
+- Node.js 18+
+- npm
 
-### Installation
+## Installation
 
 ```bash
-git clone https://github.com/feddevv/webpack-template.git
-cd webpack-template
 npm install
 ```
 
-## Usage
+## Available Scripts
 
-### Development
+### `npm run dev`
 
-Starts a dev server with hot reloading and source maps. The browser opens automatically.
+Starts the Webpack development server and opens the app in the browser.
 
-```bash
-npm run dev
+### `npm run build`
+
+Builds a production bundle into `dist/`.
+
+### `npm test`
+
+Runs Jest unit tests.
+
+## How to Play
+
+1. Place your fleet on the player board.
+2. Use each ship's orientation controls to switch between horizontal and vertical placement.
+3. Drag ships from the fleet dock onto valid cells.
+4. Start firing on the enemy board once deployment is complete.
+5. The game continues until one side loses all ships.
+
+Alternative start:
+
+- Click `Random` to auto-place both fleets and begin immediately.
+
+Controls:
+
+- `Random`: randomizes fleets and starts the match.
+- `Reset`: clears both boards and restores manual placement mode.
+
+## Rules Implemented
+
+- Board size is 10x10.
+- Fleet composition is fixed: `[4, 3, 3, 2, 2, 2, 1, 1, 1, 1]`.
+- Ships cannot overlap.
+- Ships cannot be adjacent, including diagonally.
+- Attack result states: `miss`, `hit`, `sunk`.
+- A player loses when all placed ships are sunk.
+
+## Project Structure
+
+```text
+src/
+	index.js
+	main.css
+	template.html
+	modules/
+		DOMController.js
+		Gameboard.js
+		GameController.js
+		Player.js
+		Ship.js
+	tests/
+		gameboard.test.js
+		ship.test.js
 ```
 
-- Mode: `development`
-- Source maps: `eval-source-map`
-- Watches `src/template.html` for changes
+## Architecture
 
-### Production Build
+### `Ship`
 
-Bundles and minifies the app into the `dist/` directory.
+- Tracks ship length and hit count.
+- Exposes `hit()` and `isSunk()`.
 
-```bash
-npm run build
-```
+### `Gameboard`
 
-- Mode: `production`
-- Output: `dist/main.js` + `dist/index.html`
-- `dist/` is cleaned before each build
+- Owns a 10x10 internal board.
+- Places ships with boundary and collision checks.
+- Receives attacks and returns structured outcomes.
+- Detects defeat state when no alive ships remain.
+- Supports resetting state with `clearBoard()`.
 
-## Configuration
+### `Player` and `Computer`
 
-| File                | Purpose                                                |
-| ------------------- | ------------------------------------------------------ |
-| `webpack.common.js` | Entry point, output path, CSS loader rule, HTML plugin |
-| `webpack.dev.js`    | Merges common + dev server, source maps                |
-| `webpack.prod.js`   | Merges common + production mode                        |
+- `Player` owns a `Gameboard`.
+- `Computer` extends `Player` and provides:
+  - `makeRandomMove()` for unexplored cells
+  - `findRandomNeighbor()` for follow-up targeting around hits
 
-## Dependencies
+### `GameController`
 
-All dependencies are `devDependencies` — there are no runtime dependencies.
+- Coordinates game setup, turns, and state transitions.
+- Handles player/computer move flow.
+- Manages random placement and reset behavior.
+- Connects game logic to the UI layer.
 
-| Package               | Purpose                               |
-| --------------------- | ------------------------------------- |
-| `webpack`             | Core bundler                          |
-| `webpack-cli`         | CLI for running webpack               |
-| `webpack-dev-server`  | Development server                    |
-| `webpack-merge`       | Merges config objects                 |
-| `html-webpack-plugin` | Generates HTML output from a template |
-| `css-loader`          | Resolves `@import` and `url()` in CSS |
-| `style-loader`        | Injects CSS into the DOM at runtime   |
+### `DOMController`
+
+- Creates and renders both grids.
+- Builds fleet dock UI.
+- Applies hit/miss/ship styling.
+- Handles highlight and sink animations.
+- Displays endgame modal.
+
+## Testing
+
+Current tests cover:
+
+- `Ship` hit tracking and sink detection.
+- `Gameboard` placement constraints and loss-state logic.
+
+Test files:
+
+- `src/tests/ship.test.js`
+- `src/tests/gameboard.test.js`
+
+## Build Configuration
+
+- `webpack.common.js`: shared config, entry/template/output
+- `webpack.dev.js`: development server config
+- `webpack.prod.js`: production build config
+- `babel.config.js`: Babel preset configuration for Jest/build tooling
+- `eslint.config.js`: linting configuration
 
 ## License
 
