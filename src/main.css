@@ -214,6 +214,10 @@ main {
     transform 120ms ease;
 }
 
+.highlighted {
+  background-color: rgb(130, 199, 255);
+}
+
 .enemy-board .cell:hover {
   transform: scale(0.96);
 }

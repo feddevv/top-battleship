@@ -16,13 +16,15 @@ export class GameController {
     this.#turn = this.#player
   }
 
-  render() {
-    this.#dom.renderGrid(this.#player.gameboard.gameboard, '.player-board')
-    this.#dom.renderGrid(
-      this.#computer.gameboard.gameboard,
-      '.enemy-board',
-      true,
-    )
+  initGame() {
+    this.#dom.createGrid(this.#player.gameboard.gameboard, '.player-board')
+    this.#dom.createGrid(this.#computer.gameboard.gameboard, '.enemy-board')
+
+    this.initEventListeners()
+  }
+
+  updateBoard(gameboard, container, isEnemy = false) {
+    this.#dom.renderGrid(gameboard, container, isEnemy)
   }
 
   playRound(x, y) {
@@ -41,7 +43,7 @@ export class GameController {
     if (!this.#isActive) return
 
     const isHit = this.#computer.gameboard.receiveAttack([x, y])
-    this.render()
+    this.updateBoard(this.#computer.gameboard.gameboard, '.enemy-board', true)
 
     if (this.#computer.gameboard.isLost()) {
       this.#dom.showWinPopUp(
@@ -69,7 +71,7 @@ export class GameController {
 
     const isHit = this.#player.gameboard.receiveAttack(coord)
 
-    this.render()
+    this.updateBoard(this.#player.gameboard.gameboard, '.player-board')
 
     if (this.#player.gameboard.isLost()) {
       this.#dom.showWinPopUp(
@@ -115,7 +117,9 @@ export class GameController {
   resetGame() {
     this.#player.gameboard.clearBoard()
     this.#computer.gameboard.clearBoard()
-    this.render()
+
+    this.updateBoard(this.#player.gameboard.gameboard, '.player-board')
+    this.updateBoard(this.#computer.gameboard.gameboard, '.enemy-board', true)
 
     this.#isActive = false
     this.#turn = this.#player
@@ -151,7 +155,9 @@ export class GameController {
     randomButton.addEventListener('click', () => {
       this.randomFilling(this.#player.gameboard)
       this.randomFilling(this.#computer.gameboard)
-      this.render()
+
+      this.updateBoard(this.#player.gameboard.gameboard, '.player-board')
+      this.updateBoard(this.#computer.gameboard.gameboard, '.enemy-board', true)
 
       randomButton.disabled = true
       this.#isActive = true

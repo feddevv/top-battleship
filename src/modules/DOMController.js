@@ -5,7 +5,7 @@ export class DOMController {
     grid.innerHTML = ''
   }
 
-  renderGrid(gameboard, container, isEnemy = false) {
+  createGrid(gameboard, container) {
     const grid = document.querySelector(container)
     grid.innerHTML = ''
     gameboard.forEach((i, iIndex) => {
@@ -15,15 +15,28 @@ export class DOMController {
         div.dataset.x = iIndex
         div.dataset.y = jIndex
 
-        if (j === 'miss') {
-          div.classList.add('miss')
-        } else if (j === 'hit') {
-          div.classList.add('hit')
-        } else if (j !== null && !isEnemy) {
-          div.classList.add('ship')
-        }
-
         grid.appendChild(div)
+      })
+    })
+  }
+
+  renderGrid(gameboard, container, isEnemy = false) {
+    gameboard.forEach((i, iIndex) => {
+      i.forEach((j, jIndex) => {
+        const htmlCell = document.querySelector(
+          `${container} > .cell[data-x="${iIndex}"][data-y="${jIndex}"]`,
+        )
+        const gameboardCell = gameboard[iIndex][jIndex]
+
+        if (gameboardCell === 'miss') {
+          htmlCell.className = 'cell miss'
+        } else if (j === 'hit') {
+          htmlCell.className = 'cell hit'
+        } else if (j !== null && !isEnemy) {
+          htmlCell.className = 'cell ship'
+        } else {
+          htmlCell.className = 'cell'
+        }
       })
     })
   }
@@ -46,5 +59,13 @@ export class DOMController {
     popup.querySelector('.result-message').textContent = message
 
     popup.showModal()
+  }
+
+  addHighlight(cell) {
+    cell.classList.add('highlighted')
+  }
+
+  removeHighlight(cell) {
+    cell.classList.remove('highlighted')
   }
 }
