@@ -19,6 +19,7 @@ export class GameController {
   initGame() {
     this.#dom.createGrid(this.#player.gameboard.gameboard, '.player-board')
     this.#dom.createGrid(this.#computer.gameboard.gameboard, '.enemy-board')
+    this.#dom.createDockFleet()
 
     this.initEventListeners()
   }
@@ -120,11 +121,14 @@ export class GameController {
 
     this.updateBoard(this.#player.gameboard.gameboard, '.player-board')
     this.updateBoard(this.#computer.gameboard.gameboard, '.enemy-board', true)
+    this.#dom.createDockFleet()
 
     this.#isActive = false
     this.#turn = this.#player
 
     document.querySelector('.btn.random').disabled = false
+
+    this.initEventListeners()
   }
 
   dragAndDropListeners() {
@@ -203,6 +207,8 @@ export class GameController {
         if (document.querySelector('.fleet-list').childElementCount === 0) {
           this.#isActive = true
           this.randomFilling(this.#computer.gameboard)
+
+          this.#dom.showEmpty()
         }
       })
     })

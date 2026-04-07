@@ -73,4 +73,32 @@ export class DOMController {
     const element = document.querySelector(selector)
     element.remove()
   }
+
+  createDockFleet() {
+    const ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
+    const dock = document.querySelector('.fleet-list')
+    dock.innerHTML = ''
+
+    ships.forEach((ship) => {
+      const spans = '<span></span>'.repeat(ship)
+      dock.innerHTML += `
+      <button
+        data-length="${ship}"
+        class="dock-ship length-${ship}"
+        type="button"
+        draggable="true"
+      >
+        ${spans}
+      </button>
+      `
+    })
+  }
+
+  showEmpty() {
+    const p = document.createElement('p')
+    const fleetList = document.querySelector('.fleet-list')
+    p.textContent = 'Empty'
+
+    fleetList.appendChild(p)
+  }
 }
