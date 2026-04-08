@@ -46,6 +46,14 @@ Builds a production bundle into `dist/`.
 
 Runs Jest unit tests.
 
+### `npm run predeploy`
+
+Runs the production build before deployment.
+
+### `npm run deploy`
+
+Publishes the contents of `dist/` to GitHub Pages.
+
 ## How to Play
 
 1. Place your fleet on the player board.
